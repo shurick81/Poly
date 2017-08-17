@@ -5,12 +5,12 @@
         customItemHtml: function (ctx) {
 			var itemDisplayUrl = ctx.displayFormUrl + '&ID=' + ctx.CurrentItem.ID;
 			var projectsviewItemHtml = "";
-			projectsviewItemHtml += '<div class="News-Item" width="100%">';
-			var onclickString = window.location.href='https://in.polymetal.ru/CharitySite/Lists/Posts/Post.aspx?ID='+ctx.CurrentItem.ID;
+			projectsviewItemHtml += '<div class="News-Item">';
+			//var onclickString = "openPageDialogwUrlnTitle( this.attributes['dialoghref'].value, this.title );return false;";
 			if ( ctx.CurrentItem.AnnouncePhoto != '' )
 			{
 				projectsviewItemHtml += '<div class="newsphoto">\
-					<a href="#" dialoghref="' + itemDisplayUrl + '" title="' + ctx.CurrentItem.Title + '" onclick="' + onclickString + '" class="newsTitle">\
+					<a href="'+itemDisplayUrl+'" dialoghref="' + itemDisplayUrl + '" title="' + ctx.CurrentItem.Title + '" onclick="openNewWindow(this.href); return false;" class="newsTitle">\
 						<img class="NewsLogo" width="180" height="135" src="' + ctx.CurrentItem.AnnouncePhoto + '" alt="' + ctx.CurrentItem['AnnouncePhoto.desc']+'"/>\
 					</a>\
 				</div>';
@@ -19,7 +19,7 @@
 					<tbody>\
 						<tr>\
 							<td class="td-newstitle">\
-								<a href="#" dialoghref="' + itemDisplayUrl + '" title="' + ctx.CurrentItem.Title + '" onclick="' + onclickString + '" class="newsTitle">' + ctx.CurrentItem.Title + '</a><br />\
+								<a href="'+itemDisplayUrl+'" dialoghref="' + itemDisplayUrl + '" title="' + ctx.CurrentItem.Title + '" onclick="openNewWindow(this.href); return false;" class="newsTitle">' + ctx.CurrentItem.Title + '</a><br />\
 								<span class="newsDate">' + ctx.CurrentItem.PublishedDate + '</span>\
 							</td>\
 						</tr>\
@@ -28,13 +28,12 @@
 								<div class="newscontent">\
 									' + ctx.CurrentItem.Announce + '\
 									<br class="continue-br" />\
-									<a href="#" dialoghref="' + itemDisplayUrl + '" title="' + ctx.CurrentItem.Title + '" onclick="' + onclickString + '">Читать далее ...</a><br /><br />\
+									<a href="#" dialoghref="' + itemDisplayUrl + '" title="' + ctx.CurrentItem.Title + '" onclick="openNewWindow(this.href); return false;">Читать далее ...</a><br /><br />\
 								</div>\
-							</td>\
-						</tr>\
-						<tr>\
-							<td>\
-							<span class="td-newstitle" style="color: black">' + ctx.CurrentItem.Region + '</span>\
+								<div class="newscontent">\
+									' + ctx.CurrentItem.Region + '\
+									<br class="continue-br" />\
+								</div>\
 							</td>\
 						</tr>\
 					</tbody>\
@@ -47,6 +46,11 @@
 	overrideCtx.Templates = {};
 
 	overrideCtx.Templates.Header = '<style type="text/css" >\
+		.newsblock.twocolumns .News-Item {\
+			float: left;\
+			width: 49%;\
+			min-height: 230px;\
+		}\
 		.newsphoto {\
 			float: left;\
 		}\
@@ -78,6 +82,10 @@
 			font-size:11px;\
 			color:#999999;\
 		}\
+		span.newsReg {\
+			font-size:11px;\
+			color:#999999;\
+		}\
 		td.td-newstitle {\
 			padding:10px 5px 5px 0px;\
 		}\
@@ -97,7 +105,7 @@
 			border-spacing: 0px !important;\
 		}\
 	</style>\
-	<div class="newsblock">\
+	<div class="newsblock twocolumns">\
 		<div class="News" style="border:0" width="100%">';
 	overrideCtx.Templates.Item = projectsview.Item.customItemHtml;
 	overrideCtx.Templates.Footer = "</div></div>";
@@ -125,7 +133,8 @@
 	
 	}, 'ClientTemplates.js');
 })();
-function openPageDialogwUrlnTitle(url, title) {
-	var o = { url:url, title: title, allowMaximize: true, showClose: true, autoSize: true };
-	SP.UI.ModalDialog.showModalDialog(o);
+function openNewWindow(url) {
+	window.open(url)
+	
 }
+
